@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="BTRF">
+<meta name="theme-color" content="#0a0a0f">
+<title>BTRF — Business Travel Reimbursement</title>
+<style>
+/* Inline icon replacements - no CDN needed */
+.ti::before { font-style:normal; }
+.ti-bolt::before { content:'⚡'; }
+.ti-map::before { content:'🗺'; }
+.ti-chart-bar::before { content:'📊'; }
+.ti-plus::before { content:'＋'; }
+.ti-x::before { content:'✕'; }
+.ti-trash::before { content:'🗑'; }
+.ti-bowl-chopsticks::before { content:'🍽'; }
+.ti-car::before { content:'🚗'; }
+.ti-shopping-bag::before { content:'🛍'; }
+.ti-wallet::before { content:'💰'; }
+.ti-file-invoice::before { content:'📄'; }
+</style>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%;overflow:hidden;background:#0a0a0f}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#e8e8f0}
+
+  #app{display:flex;flex-direction:column;height:100vh;height:100dvh;background:#0a0a0f;position:relative;overflow:hidden}
+  #app::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(180,0,20,0.04) 39px,rgba(180,0,20,0.04) 40px),repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(180,0,20,0.04) 39px,rgba(180,0,20,0.04) 40px);pointer-events:none;z-index:0}
+
+  .mirror{position:absolute;top:0;right:-80px;width:100px;height:100%;background:linear-gradient(90deg,transparent,rgba(192,0,26,0.05),transparent);pointer-events:none;animation:ms 5s ease-in-out infinite;z-index:0}
+  @keyframes ms{0%,100%{opacity:0;transform:translateX(0)}50%{opacity:1;transform:translateX(-420px)}}
+
+  /* HEADER */
+  .hdr{background:#0d0010;border-bottom:2px solid #c0001a;padding:env(safe-area-inset-top,12px) 16px 10px;padding-top:calc(env(safe-area-inset-top,0px) + 12px);position:relative;z-index:10;flex-shrink:0}
+  .hdr-row{display:flex;align-items:center;gap:10px}
+  .visor{width:38px;height:22px;background:linear-gradient(135deg,#c0001a,#7a0010);clip-path:polygon(12% 0%,88% 0%,100% 50%,88% 100%,12% 100%,0% 50%);flex-shrink:0;position:relative}
+  .visor::after{content:'';position:absolute;inset:3px 5px;background:linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,80,80,0.08));clip-path:polygon(12% 0%,88% 0%,100% 50%,88% 100%,12% 100%,0% 50%)}
+  .hdr-title{font-size:17px;font-weight:600;letter-spacing:3px;color:#fff;text-transform:uppercase}
+  .hdr-sub{font-size:10px;color:#c0001a;letter-spacing:2px;text-transform:uppercase;margin-top:1px}
+
+  /* NAV */
+  .nav{display:flex;background:#110016;border-bottom:1px solid rgba(192,0,26,0.4);position:relative;z-index:10;flex-shrink:0}
+  .nt{flex:1;padding:9px 4px 7px;text-align:center;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#a08090;cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;transition:all 0.2s}
+  .nt i{display:block;font-size:18px;margin-bottom:2px}
+  .nt.on{color:#ff3355;border-bottom-color:#c0001a;background:rgba(192,0,26,0.14)}
+
+  /* SCROLL AREA */
+  .pages{flex:1;overflow:hidden;position:relative;z-index:1}
+  .pg{display:none;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(env(safe-area-inset-bottom,20px) + 20px)}
+  .pg.on{display:block}
+
+  /* COMPONENTS */
+  .slbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#c0001a;margin:14px 0 7px;display:flex;align-items:center;gap:8px}
+  .slbl::after{content:'';flex:1;height:1px;background:rgba(192,0,26,0.25)}
+  .slbl:first-child{margin-top:2px}
+
+  .card{background:rgba(18,5,18,0.95);border:1px solid rgba(192,0,26,0.22);border-radius:10px;padding:13px;margin-bottom:10px;position:relative}
+  .card::before{content:'';position:absolute;top:0;left:16px;right:16px;height:1px;background:linear-gradient(90deg,transparent,rgba(232,0,29,0.4),transparent)}
+
+  .fl{display:flex;gap:8px}
+  .fl .fg{flex:1;min-width:0}
+  .fg{margin-bottom:10px}
+  .flbl{font-size:10px;color:#a08090;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+
+  input,select,textarea{width:100%;background:#08000e;border:1px solid rgba(192,0,26,0.3);border-radius:8px;color:#e8e8f0;font-size:16px;padding:10px 12px;outline:none;font-family:inherit;-webkit-appearance:none;appearance:none}
+  input:focus,select:focus,textarea:focus{border-color:#c0001a;box-shadow:0 0 0 2px rgba(192,0,26,0.15)}
+  select option{background:#1a0010}
+  input[type=number]{-moz-appearance:textfield}
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+
+  .cat-pills{display:flex;gap:6px;flex-wrap:wrap}
+  .cat-pill{padding:8px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(192,0,26,0.25);background:transparent;color:#a08090;cursor:pointer;letter-spacing:0.3px;transition:all 0.15s;-webkit-appearance:none}
+  .cat-pill.sel{background:rgba(192,0,26,0.18);border-color:#c0001a;color:#ff4466}
+
+  .btn-p{width:100%;padding:14px;background:linear-gradient(135deg,#c0001a,#8a0010);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;position:relative;overflow:hidden;-webkit-appearance:none}
+  .btn-p::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);animation:sh 2.5s infinite}
+  @keyframes sh{to{left:160%}}
+  .btn-s{padding:9px 14px;background:transparent;border:1px solid rgba(192,0,26,0.35);border-radius:8px;color:#e8001d;font-size:12px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;-webkit-appearance:none}
+  .btn-sm{padding:7px 11px;background:transparent;border:1px solid rgba(192,0,26,0.25);border-radius:8px;color:#e8001d;font-size:12px;cursor:pointer;-webkit-appearance:none}
+
+  .trip-sel{background:#08000e;border:2px solid rgba(192,0,26,0.5);border-radius:10px;color:#fff;font-size:15px;padding:12px 14px;letter-spacing:1px;margin-bottom:14px;width:100%}
+  .trip-sel:focus{border-color:#c0001a}
+
+  .qcard{background:linear-gradient(135deg,rgba(192,0,26,0.1),rgba(40,0,20,0.85));border:1px solid rgba(192,0,26,0.35);border-radius:12px;padding:14px;margin-bottom:14px}
+  .qhero{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .qtitle{font-size:15px;font-weight:600;letter-spacing:2px;color:#fff}
+  .qdays{font-size:11px;color:#888;margin-top:2px}
+  .qstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+  .qs{background:rgba(0,0,0,0.3);border-radius:8px;padding:8px;text-align:center}
+  .qs .ql{font-size:9px;color:#888;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px}
+  .qs .qv{font-size:13px;font-weight:600;color:#e8e8f0}
+  .qs .qv.g{color:#4cde82}
+  .qs .qv.r{color:#e8001d}
+  .qs .qv.y{color:#d4a017}
+
+  .elist .ei{display:flex;align-items:flex-start;gap:8px;padding:10px 0;border-bottom:1px solid rgba(192,0,26,0.08)}
+  .elist .ei:last-child{border:none}
+  .edot{width:7px;height:7px;border-radius:50%;background:#c0001a;flex-shrink:0;margin-top:4px}
+  .edesc{flex:1;color:#ddd;font-size:13px;line-height:1.4}
+  .ecat{font-size:10px;color:#888;margin-top:2px}
+  .eamt{font-size:13px;font-weight:600;white-space:nowrap;text-align:right}
+  .eclaim{font-size:10px;color:#4cde82;text-align:right}
+
+  .tcard{background:rgba(15,3,15,0.95);border:1px solid rgba(192,0,26,0.22);border-radius:10px;padding:13px;margin-bottom:10px}
+  .tcard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+  .tcode{font-size:15px;font-weight:600;letter-spacing:2px;color:#fff}
+  .tinfo{font-size:10px;color:#888;margin-top:2px;line-height:1.5}
+  .tstatus{padding:4px 10px;border-radius:10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;flex-shrink:0}
+  .tstatus.open{background:rgba(76,222,130,0.12);color:#4cde82;border:1px solid rgba(76,222,130,0.2)}
+  .tstatus.closed{background:rgba(192,0,26,0.12);color:#c0001a;border:1px solid rgba(192,0,26,0.2)}
+  .tamts{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+  .ta .tl{font-size:9px;color:#666;letter-spacing:1px;text-transform:uppercase}
+  .ta .tv{color:#e8e8f0;font-size:13px;font-weight:500}
+  .ta .tv.g{color:#4cde82}
+  .tbtns{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+
+  .shero{background:linear-gradient(135deg,rgba(192,0,26,0.12),rgba(40,0,20,0.9));border:1px solid rgba(192,0,26,0.3);border-radius:12px;padding:18px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden}
+  .shero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(192,0,26,0.03) 10px,rgba(192,0,26,0.03) 11px)}
+  .shl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:4px;position:relative}
+  .sha{font-size:30px;font-weight:600;color:#fff;position:relative}
+  .shs{font-size:12px;color:#c0001a;margin-top:4px;position:relative}
+
+  .sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+  .sc{background:rgba(12,3,12,0.9);border:1px solid rgba(192,0,26,0.15);border-radius:8px;padding:11px;text-align:center}
+  .sc .sl{font-size:9px;color:#666;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+  .sc .sv{font-size:17px;font-weight:600;color:#e8e8f0}
+  .sc.g .sv{color:#4cde82}
+  .sc.y .sv{color:#d4a017}
+
+  .brow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(192,0,26,0.09)}
+  .brow:last-child{border:none}
+  .bcat{display:flex;align-items:center;gap:7px;color:#ccc;font-size:13px}
+  .bcat i{color:#c0001a;font-size:15px}
+  .bvals{text-align:right}
+  .bact{font-size:12px;color:#e8e8f0}
+  .bclm{font-size:10px;color:#4cde82}
+
+  .tgl{width:44px;height:26px;background:#2a1a2a;border-radius:13px;position:relative;cursor:pointer;border:none;transition:background 0.2s;flex-shrink:0;-webkit-appearance:none}
+  .tgl.on{background:#c0001a}
+  .tgl::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left 0.2s}
+  .tgl.on::after{left:21px}
+  .trow{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+  .tlbl{font-size:13px;color:#ccc}
+
+  .bar-chart{display:flex;align-items:flex-end;gap:6px;height:80px;margin-top:8px}
+  .bc-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+  .bc-bar{width:100%;border-radius:4px 4px 0 0;min-height:2px;transition:height 0.6s}
+  .bc-lbl{font-size:9px;color:#666;text-align:center}
+  .bc-amt{font-size:9px;color:#aaa;text-align:center}
+
+  .notif{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#c0001a;color:#fff;padding:10px 22px;border-radius:20px;font-size:13px;letter-spacing:1px;z-index:999;opacity:0;transition:opacity 0.3s;white-space:nowrap;pointer-events:none}
+  .notif.show{opacity:1}
+
+  .empty{text-align:center;padding:40px 16px;color:#555}
+  .empty i{font-size:40px;margin-bottom:12px;display:block}
+  .empty p{font-size:13px;line-height:1.7}
+
+  .hint-box{background:rgba(212,160,23,0.08);border:1px solid rgba(212,160,23,0.2);border-radius:8px;padding:9px 12px;font-size:12px;color:#d4a017;margin-bottom:10px}
+
+  .chip{display:inline-flex;align-items:center;gap:6px;background:rgba(192,0,26,0.1);border:1px solid rgba(192,0,26,0.3);border-radius:20px;padding:5px 12px;font-size:12px;color:#e8001d;letter-spacing:1px;margin-bottom:12px}
+
+  .entry-del{padding:6px 8px;background:transparent;border:1px solid rgba(192,0,26,0.2);border-radius:6px;color:#c0001a;font-size:12px;cursor:pointer;margin-left:4px;flex-shrink:0}
+
+  /* scrollbar */
+  .pg::-webkit-scrollbar{width:3px}
+  .pg::-webkit-scrollbar-track{background:transparent}
+  .pg::-webkit-scrollbar-thumb{background:rgba(192,0,26,0.3);border-radius:2px}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="mirror"></div>
+
+  <div class="hdr">
+    <div class="hdr-row">
+      <div class="visor"></div>
+      <div>
+        <div class="hdr-title">BTRF</div>
+        <div class="hdr-sub">Business Travel Reimbursement</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <button class="nt on" onclick="go('quick')" id="tab-quick">⚡ Quick Add</button>
+    <button class="nt" onclick="go('trips')" id="tab-trips">🗺 Trips</button>
+    <button class="nt" onclick="go('dash')" id="tab-dash">📊 Dashboard</button>
+  </div>
+
+  <div class="pages">
+
+    <!-- QUICK ADD -->
+    <div id="pg-quick" class="pg on">
+      <div class="slbl">Active Trip</div>
+      <select class="trip-sel" id="tripSel" onchange="onTripSel()">
+        <option value="">— Pilih trip —</option>
+      </select>
+      <div id="activeTripCard"></div>
+
+      <div id="quickForm" style="display:none">
+        <div class="slbl">Add Entry</div>
+        <div class="card">
+          <div class="fg" style="margin-bottom:10px">
+            <div class="flbl">Category</div>
+            <div class="cat-pills">
+              <button class="cat-pill sel" onclick="selCat(this,'Meals')">🍽 Meals</button>
+              <button class="cat-pill" onclick="selCat(this,'Transport')">🚗 Transport</button>
+              <button class="cat-pill" onclick="selCat(this,'Addons')">🛍 Addons</button>
+            </div>
+          </div>
+          <div id="mealHint" class="hint-box" style="display:none"></div>
+          <div class="fg"><div class="flbl">Tanggal</div><input type="date" id="eDate"></div>
+          <div class="fl">
+            <div class="fg" style="flex:2">
+              <div class="flbl">Description</div>
+              <input type="text" id="eDesc" placeholder="e.g. Grab to airport" autocomplete="off">
+            </div>
+            <div class="fg" style="flex:1">
+              <div class="flbl">Amount (Rp)</div>
+              <input type="number" id="eAmt" placeholder="0" inputmode="numeric">
+            </div>
+          </div>
+          <button class="btn-p" onclick="addEntry()">⚔ Add Entry</button>
+        </div>
+
+        <div class="slbl">Entries Hari Ini</div>
+        <div class="card">
+          <div id="todayEntries" class="elist"></div>
+        </div>
+
+        <div class="slbl">Semua Entries Trip Ini</div>
+        <div class="card">
+          <div id="allEntries" class="elist"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRIPS -->
+    <div id="pg-trips" class="pg">
+      <button class="btn-p" onclick="showNewTrip()" style="margin-bottom:14px">+ New Trip</button>
+      <div id="newTripForm" style="display:none">
+        <div class="slbl">New Trip</div>
+        <div class="card">
+          <div class="fl">
+            <div class="fg">
+              <div class="flbl">Trip Code</div>
+              <input type="text" id="nCode" placeholder="BDG2" maxlength="8" autocomplete="off">
+            </div>
+            <div class="fg">
+              <div class="flbl">Destination</div>
+              <input type="text" id="nDest" placeholder="Bandung" autocomplete="off">
+            </div>
+          </div>
+          <div class="fl">
+            <div class="fg">
+              <div class="flbl">Start Date</div>
+              <input type="date" id="nStart">
+            </div>
+            <div class="fg">
+              <div class="flbl">End Date</div>
+              <input type="date" id="nEnd">
+            </div>
+          </div>
+          <div class="fl">
+            <div class="fg">
+              <div class="flbl">Jam Departure</div>
+              <input type="time" id="nDep">
+            </div>
+            <div class="fg">
+              <div class="flbl">Jam Tiba Kendari</div>
+              <input type="time" id="nArr">
+            </div>
+          </div>
+          <div class="trow" style="padding:4px 0 10px">
+            <span class="tlbl" style="font-size:13px">Hotel breakfast included</span>
+            <button class="tgl" id="nBfast" onclick="this.classList.toggle('on')" aria-label="Breakfast included"></button>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <button class="btn-p" onclick="createTrip()" style="flex:2">⚔ Create Trip</button>
+            <button class="btn-s" onclick="hideNewTrip()">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="slbl">All Trips</div>
+      <div id="tripsList"></div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="pg-dash" class="pg">
+      <div id="dashContent"></div>
+    </div>
+
+  </div><!-- /pages -->
+
+  <div class="notif" id="notif"></div>
+</div>
+
+<script>
+const MEAL_CAP = 45000;
+const INC_RATE = 65000;
+
+function db(){ return JSON.parse(localStorage.getItem('btrf_v3')||'[]'); }
+function save(t){ localStorage.setItem('btrf_v3',JSON.stringify(t)); }
+
+function fmt(n){ return 'Rp '+Math.round(n).toLocaleString('id-ID'); }
+function fmtk(n){ const k=Math.round(n/1000); return k+'k'; }
+
+function getDays(s,e){
+  if(!s||!e) return 1;
+  const d=Math.ceil((new Date(e)-new Date(s))/86400000)+1;
+  return d<1?1:d;
+}
+
+function calcIncidental(days,dep,arr){
+  // Setiap hari full, kecuali:
+  // Hari pertama: jika departure >= 12:00 → ½
+  // Hari terakhir: jika arrival < 12:00 → ½
+  let base=days*INC_RATE;
+  if(dep){
+    const h=parseInt((dep||'0').split(':')[0]);
+    if(h>=12) base=base-INC_RATE+(INC_RATE*0.5);
+  }
+  if(arr&&days>1){
+    const h=parseInt((arr||'0').split(':')[0]);
+    if(h<12) base=base-INC_RATE+(INC_RATE*0.5);
+  }
+  return base;
+}
+
+function calcTotals(t){
+  const days=getDays(t.dateStart,t.dateEnd);
+  let mA=0,mC=0,trA=0,adA=0;
+  (t.entries||[]).forEach(e=>{
+    if(e.cat==='Meals'){ mA+=e.amt; mC+=Math.min(e.amt,MEAL_CAP); }
+    else if(e.cat==='Transport'){ trA+=e.amt; }
+    else { adA+=e.amt; }
+  });
+  const inc=calcIncidental(days,t.departure,t.arrival);
+  const totalA=mA+trA+adA;
+  const totalC=mC+trA+inc;
+  return{mA,mC,trA,adA,inc,totalA,totalC,net:totalC-totalA,days};
+}
+
+let selCatVal='Meals';
+function selCat(el,cat){
+  document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('sel'));
+  el.classList.add('sel');
+  selCatVal=cat;
+  updateMealHint();
+}
+
+function updateMealHint(){
+  const hint=document.getElementById('mealHint');
+  if(selCatVal!=='Meals'){hint.style.display='none';return;}
+  const val=document.getElementById('tripSel').value;
+  if(!val){hint.style.display='none';return;}
+  const t=db().find(x=>x.id===parseInt(val));
+  if(!t){hint.style.display='none';return;}
+  const maxM=t.breakfast?2:3;
+  const today=new Date().toISOString().slice(0,10);
+  const todayMeals=(t.entries||[]).filter(e=>e.cat==='Meals'&&e.date===today).length;
+  hint.style.display='block';
+  hint.textContent=`Meals hari ini: ${todayMeals}/${maxM} slot · Ceiling Rp 45.000/meal`;
+}
+
+function onTripSel(){
+  // set default date to today
+  const todayStr=new Date().toISOString().slice(0,10);
+  const eDateEl=document.getElementById('eDate');
+  if(eDateEl&&!eDateEl.value) eDateEl.value=todayStr;
+  renderActiveTripCard();
+  const val=document.getElementById('tripSel').value;
+  document.getElementById('quickForm').style.display=val?'block':'none';
+  if(val){renderTodayEntries();renderAllEntries();updateMealHint();}
+}
+
+function renderActiveTripCard(){
+  const val=document.getElementById('tripSel').value;
+  const el=document.getElementById('activeTripCard');
+  if(!val){el.innerHTML='';return;}
+  const t=db().find(x=>x.id===parseInt(val));
+  if(!t){el.innerHTML='';return;}
+  const tot=calcTotals(t);
+  el.innerHTML=`
+    <div class="qcard">
+      <div class="qhero">
+        <div>
+          <div class="qtitle">${t.code}</div>
+          <div class="qdays">${t.destination||''} · ${tot.days} hari · ${t.dateStart||''}${t.dateEnd?' → '+t.dateEnd:''}</div>
+        </div>
+        <span class="tstatus ${t.open?'open':'closed'}">${t.open?'Open':'Closed'}</span>
+      </div>
+      <div class="qstats">
+        <div class="qs"><div class="ql">Actual</div><div class="qv">${fmtk(tot.totalA)}</div></div>
+        <div class="qs"><div class="ql">Claimable</div><div class="qv g">${fmtk(tot.totalC)}</div></div>
+        <div class="qs"><div class="ql">Net</div><div class="qv ${tot.net>=0?'g':'r'}">${tot.net>=0?'+':''}${fmtk(tot.net)}</div></div>
+      </div>
+    </div>`;
+}
+
+function renderTodayEntries(){
+  const val=document.getElementById('tripSel').value;
+  if(!val) return;
+  const t=db().find(x=>x.id===parseInt(val));
+  if(!t) return;
+  const today=new Date().toISOString().slice(0,10);
+  const entries=(t.entries||[]).filter(e=>e.date===today);
+  const el=document.getElementById('todayEntries');
+  if(!entries.length){
+    el.innerHTML='<div style="color:#555;font-size:12px;text-align:center;padding:10px">Belum ada entry hari ini</div>';
+    return;
+  }
+  renderEntryList(el,entries,t.id);
+}
+
+function renderAllEntries(){
+  const val=document.getElementById('tripSel').value;
+  if(!val) return;
+  const t=db().find(x=>x.id===parseInt(val));
+  if(!t) return;
+  const el=document.getElementById('allEntries');
+  const entries=t.entries||[];
+  if(!entries.length){
+    el.innerHTML='<div style="color:#555;font-size:12px;text-align:center;padding:10px">Belum ada entry</div>';
+    return;
+  }
+  renderEntryList(el,[...entries].reverse(),t.id);
+}
+
+function renderEntryList(el,entries,tripId){
+  el.innerHTML=entries.map(e=>{
+    const cl=e.cat==='Meals'?Math.min(e.amt,MEAL_CAP):e.cat==='Transport'?e.amt:0;
+    return `<div class="ei">
+      <div class="edot"></div>
+      <div class="edesc">${e.desc||'—'}<div class="ecat">${e.cat} · ${e.date}</div></div>
+      <div style="text-align:right">
+        <div class="eamt">${fmt(e.amt)}</div>
+        ${e.cat!=='Addons'?`<div class="eclaim">claim: ${fmt(cl)}</div>`:'<div class="eclaim" style="color:#666">—</div>'}
+      </div>
+      <button class="entry-del" onclick="deleteEntry(${tripId},${e.id})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+function deleteEntry(tripId,entryId){
+  const trips=db();
+  const ti=trips.findIndex(t=>t.id===tripId);
+  if(ti<0) return;
+  trips[ti].entries=trips[ti].entries.filter(e=>e.id!==entryId);
+  save(trips);
+  onTripSel();
+  renderActiveTripCard();
+  showNotif('Entry deleted.');
+}
+
+function addEntry(){
+  const val=document.getElementById('tripSel').value;
+  if(!val){showNotif('Pilih trip dulu!');return;}
+  const desc=document.getElementById('eDesc').value.trim();
+  const amt=parseFloat(document.getElementById('eAmt').value)||0;
+  if(!amt){showNotif('Masukkan amount!');return;}
+  const entryDate=document.getElementById('eDate').value||new Date().toISOString().slice(0,10);
+  const trips=db();
+  const ti=trips.findIndex(t=>t.id===parseInt(val));
+  if(ti<0) return;
+  trips[ti].entries.push({id:Date.now(),cat:selCatVal,desc,amt,date:entryDate});
+  save(trips);
+  document.getElementById('eDesc').value='';
+  document.getElementById('eAmt').value='';
+  // reset date to today
+  document.getElementById('eDate').value=new Date().toISOString().slice(0,10);
+  renderActiveTripCard();
+  renderTodayEntries();
+  renderAllEntries();
+  updateMealHint();
+  showNotif('Entry added!');
+}
+
+function populateTripSel(){
+  const sel=document.getElementById('tripSel');
+  const cur=sel.value;
+  const trips=db().filter(t=>t.open);
+  sel.innerHTML='<option value="">— Pilih trip —</option>';
+  trips.forEach(t=>{
+    const o=document.createElement('option');
+    o.value=t.id;
+    o.textContent=`${t.code}${t.destination?' — '+t.destination:''}`;
+    sel.appendChild(o);
+  });
+  if(cur) sel.value=cur;
+}
+
+function showNewTrip(){
+  document.getElementById('newTripForm').style.display='block';
+  const today=new Date().toISOString().slice(0,10);
+  document.getElementById('nStart').value=today;
+}
+function hideNewTrip(){ document.getElementById('newTripForm').style.display='none'; }
+
+function createTrip(){
+  const code=document.getElementById('nCode').value.trim();
+  const dest=document.getElementById('nDest').value.trim();
+  const ds=document.getElementById('nStart').value;
+  const de=document.getElementById('nEnd').value;
+  const dep=document.getElementById('nDep').value;
+  const arr=document.getElementById('nArr').value;
+  const bfast=document.getElementById('nBfast').classList.contains('on');
+  if(!code){showNotif('Masukkan trip code!');return;}
+  const trips=db();
+  trips.push({id:Date.now(),code,destination:dest,dateStart:ds,dateEnd:de,departure:dep,arrival:arr,breakfast:bfast,open:true,entries:[],createdAt:new Date().toISOString()});
+  save(trips);
+  hideNewTrip();
+  ['nCode','nDest','nDep','nArr'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('nBfast').classList.remove('on');
+  renderTripsList();
+  populateTripSel();
+  showNotif('Trip created!');
+}
+
+function renderTripsList(){
+  const trips=db();
+  const el=document.getElementById('tripsList');
+  if(!trips.length){
+    el.innerHTML='<div class="empty">🗺 <p>Belum ada trip.<br>Buat trip pertama kamu di atas.</p></div>';
+    return;
+  }
+  el.innerHTML=trips.slice().reverse().map((t,ri)=>{
+    const i=trips.length-1-ri;
+    const tot=calcTotals(t);
+    return `<div class="tcard">
+      <div class="tcard-top">
+        <div>
+          <div class="tcode">${t.code}</div>
+          <div class="tinfo">${t.destination||''} · ${t.dateStart||''}${t.dateEnd?' → '+t.dateEnd:''}<br>${tot.days} hari · ${(t.entries||[]).length} entries${t.breakfast?' · Breakfast incl.':''}</div>
+        </div>
+        <span class="tstatus ${t.open?'open':'closed'}">${t.open?'Open':'Closed'}</span>
+      </div>
+      <div class="tamts">
+        <div class="ta"><div class="tl">Actual</div><div class="tv">${fmt(tot.totalA)}</div></div>
+        <div class="ta"><div class="tl">Claimable</div><div class="tv g">${fmt(tot.totalC)}</div></div>
+        <div class="ta"><div class="tl">Net</div><div class="tv" style="color:${tot.net>=0?'#4cde82':'#e8001d'}">${tot.net>=0?'+':''}${fmt(tot.net)}</div></div>
+      </div>
+      <div class="tbtns">
+        <button class="btn-s" onclick="openEditModal(${i})">Edit</button>
+        <button class="btn-s" onclick="showTripDetail(${i})">Detail</button>
+        ${t.open?`<button class="btn-s" onclick="closeTrip(${i})" style="color:#d4a017;border-color:rgba(212,160,23,0.3)">Close Trip</button>`:''}
+        <button class="btn-s" onclick="exportCSV(${i})" style="color:#4cde82;border-color:rgba(76,222,130,0.3)">Export CSV</button>
+        <button class="btn-sm" onclick="deleteTrip(${i})">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function closeTrip(i){
+  const trips=db();
+  trips[i].open=false;
+  save(trips);
+  renderTripsList();
+  populateTripSel();
+  onTripSel();
+  showNotif('Trip closed.');
+}
+
+function deleteTrip(i){
+  if(!confirm('Hapus trip ini?')) return;
+  const trips=db();
+  trips.splice(i,1);
+  save(trips);
+  renderTripsList();
+  populateTripSel();
+  showNotif('Deleted.');
+}
+
+function showTripDetail(i){
+  const trips=db();
+  const t=trips[i];
+  if(!t) return;
+  go('dash');
+  const tot=calcTotals(t);
+  const el=document.getElementById('dashContent');
+  const byDate={};
+  (t.entries||[]).forEach(e=>{ if(!byDate[e.date]) byDate[e.date]=[]; byDate[e.date].push(e); });
+  el.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div class="chip">🗺 ${t.code} — ${t.destination||'Trip'}</div>
+      <button class="btn-s" onclick="renderDash()">← Back</button>
+    </div>
+    <div class="shero">
+      <div class="shl">Total Claimable</div>
+      <div class="sha">${fmt(tot.totalC)}</div>
+      <div class="shs">Net ${tot.net>=0?'+':''}${fmt(tot.net)} vs actual spend</div>
+    </div>
+    <div class="sgrid">
+      <div class="sc"><div class="sl">Actual Spend</div><div class="sv">${fmt(tot.totalA)}</div></div>
+      <div class="sc"><div class="sl">Duration</div><div class="sv">${tot.days} hari</div></div>
+      <div class="sc g"><div class="sl">Incidental</div><div class="sv">${fmt(tot.inc)}</div></div>
+      <div class="sc ${tot.net>=0?'g':''}"><div class="sl">Net</div><div class="sv">${tot.net>=0?'+':''}${fmt(tot.net)}</div></div>
+    </div>
+    <div class="slbl">Breakdown</div>
+    <div class="card">
+      <div class="brow"><div class="bcat">🍽 Meals</div><div class="bvals"><div class="bact">${fmt(tot.mA)}</div><div class="bclm">claim: ${fmt(tot.mC)}</div></div></div>
+      <div class="brow"><div class="bcat">🚗 Transport</div><div class="bvals"><div class="bact">${fmt(tot.trA)}</div><div class="bclm">claim: ${fmt(tot.trA)}</div></div></div>
+      ${tot.adA>0?`<div class="brow"><div class="bcat">🛍 Addons</div><div class="bvals"><div class="bact">${fmt(tot.adA)}</div><div class="bclm" style="color:#888">—</div></div></div>`:''}
+      <div class="brow"><div class="bcat">💰 Incidental</div><div class="bvals"><div class="bact" style="font-size:10px;color:#888">${tot.days} hari · dep ${t.departure||'—'} · tiba ${t.arrival||'—'}</div><div class="bclm">${fmt(tot.inc)}</div></div></div>
+    </div>
+    <div class="slbl">Entries by Date</div>
+    ${Object.keys(byDate).sort().reverse().map(d=>`
+      <div class="card">
+        <div style="font-size:10px;color:#888;letter-spacing:1px;margin-bottom:8px">${d}</div>
+        <div class="elist">${byDate[d].map(e=>{
+          const cl=e.cat==='Meals'?Math.min(e.amt,MEAL_CAP):e.cat==='Transport'?e.amt:0;
+          return `<div class="ei">
+            <div class="edot"></div>
+            <div class="edesc">${e.desc||'—'}<div class="ecat">${e.cat}</div></div>
+            <div style="text-align:right">
+              <div class="eamt">${fmt(e.amt)}</div>
+              ${e.cat!=='Addons'?`<div class="eclaim">${fmt(cl)}</div>`:'<div class="eclaim" style="color:#666">addons</div>'}
+            </div>
+          </div>`;
+        }).join('')}</div>
+      </div>
+    `).join('')}
+    <button class="btn-p" onclick="exportCSV(${i})" style="margin-top:4px">↓ Export CSV</button>
+  `;
+}
+
+function exportCSV(i){
+  const trips=db();
+  const t=trips[i];
+  if(!t) return;
+  const tot=calcTotals(t);
+  let csv='\uFEFF';
+  csv+='BTRF Export\r\n';
+  csv+=`Trip Code,${t.code}\r\n`;
+  csv+=`Destination,${t.destination||''}\r\n`;
+  csv+=`Period,"${t.dateStart||''} - ${t.dateEnd||''}"\r\n`;
+  csv+=`Duration,${tot.days} hari\r\n`;
+  csv+=`Breakfast Included,${t.breakfast?'Yes':'No'}\r\n`;
+  csv+=`Departure,${t.departure||''}\r\n\r\n`;
+  csv+='Date,Category,Description,Actual (Rp),Claimable (Rp)\r\n';
+  (t.entries||[]).forEach(e=>{
+    const cl=e.cat==='Meals'?Math.min(e.amt,MEAL_CAP):e.cat==='Transport'?e.amt:0;
+    csv+=`${e.date},${e.cat},"${(e.desc||'').replace(/"/g,'""')}",${e.amt},${cl}\r\n`;
+  });
+  csv+='\r\nSummary\r\n';
+  csv+=`Meals Actual,${tot.mA}\r\n`;
+  csv+=`Meals Claimable,${tot.mC}\r\n`;
+  csv+=`Transport Actual,${tot.trA}\r\n`;
+  csv+=`Transport Claimable,${tot.trA}\r\n`;
+  csv+=`Addons (non-claimable),${tot.adA}\r\n`;
+  csv+=`Incidental Allowance,${tot.inc}\r\n`;
+  csv+=`Total Actual,${tot.totalA}\r\n`;
+  csv+=`Total Claimable,${tot.totalC}\r\n`;
+  csv+=`Net (Claimable - Actual),${tot.net}\r\n`;
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`BTRF_${t.code}_${t.dateStart||'export'}.csv`;
+  document.body.appendChild(a);a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  showNotif('CSV exported!');
+}
+
+function renderDash(){
+  const trips=db();
+  const el=document.getElementById('dashContent');
+  if(!trips.length){
+    el.innerHTML='<div class="empty">📊 <p>Belum ada data.<br>Buat trip dan tambah entries dulu.</p></div>';
+    return;
+  }
+  const totals=trips.map(t=>calcTotals(t));
+  const sumA=totals.reduce((s,t)=>s+t.totalA,0);
+  const sumC=totals.reduce((s,t)=>s+t.totalC,0);
+  const sumM=totals.reduce((s,t)=>s+t.mA,0);
+  const sumTr=totals.reduce((s,t)=>s+t.trA,0);
+  const sumAd=totals.reduce((s,t)=>s+t.adA,0);
+  const sumInc=totals.reduce((s,t)=>s+t.inc,0);
+  const maxB=Math.max(sumM,sumTr,sumAd,sumInc,1);
+  el.innerHTML=`
+    <div class="shero">
+      <div class="shl">All Trips — Total Claimable</div>
+      <div class="sha">${fmt(sumC)}</div>
+      <div class="shs">${trips.length} trip · Actual ${fmt(sumA)}</div>
+    </div>
+    <div class="sgrid">
+      <div class="sc"><div class="sl">Total Actual</div><div class="sv">${fmt(sumA)}</div></div>
+      <div class="sc"><div class="sl">Trips</div><div class="sv">${trips.length}</div></div>
+      <div class="sc g"><div class="sl">Total Incidental</div><div class="sv">${fmt(sumInc)}</div></div>
+      <div class="sc ${sumC>=sumA?'g':''}"><div class="sl">Net All</div><div class="sv">${sumC>=sumA?'+':''}${fmt(sumC-sumA)}</div></div>
+    </div>
+    <div class="slbl">Spending by Category</div>
+    <div class="card">
+      <div class="bar-chart">
+        ${[{l:'Meals',v:sumM,c:'#c0001a'},{l:'Transport',v:sumTr,c:'#4040c0'},{l:'Addons',v:sumAd,c:'#555'},{l:'Incidental',v:sumInc,c:'#d4a017'}].map(b=>`
+          <div class="bc-col">
+            <div class="bc-amt">${fmtk(b.v)}</div>
+            <div style="flex:1;display:flex;align-items:flex-end;width:100%">
+              <div class="bc-bar" style="height:${Math.round((b.v/maxB)*62)}px;background:${b.c}"></div>
+            </div>
+            <div class="bc-lbl">${b.l}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div class="slbl">All Contracts</div>
+    ${trips.slice().reverse().map((t,ri)=>{
+      const i2=trips.length-1-ri;
+      const tot=totals[trips.length-1-ri];
+      return `<div class="tcard" style="cursor:pointer" onclick="showTripDetail(${i2})">
+        <div class="tcard-top">
+          <div>
+            <div class="tcode">${t.code}</div>
+            <div class="tinfo">${t.destination||''} · ${tot.days} hari · ${(t.entries||[]).length} entries</div>
+          </div>
+          <span class="tstatus ${t.open?'open':'closed'}">${t.open?'Open':'Closed'}</span>
+        </div>
+        <div class="tamts">
+          <div class="ta"><div class="tl">Actual</div><div class="tv">${fmt(tot.totalA)}</div></div>
+          <div class="ta"><div class="tl">Claimable</div><div class="tv g">${fmt(tot.totalC)}</div></div>
+          <div class="ta"><div class="tl">Net</div><div class="tv" style="color:${tot.net>=0?'#4cde82':'#e8001d'}">${tot.net>=0?'+':''}${fmt(tot.net)}</div></div>
+        </div>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+function go(page){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nt').forEach(t=>t.classList.remove('on'));
+  document.getElementById('pg-'+page).classList.add('on');
+  document.getElementById('tab-'+page).classList.add('on');
+  if(page==='trips') renderTripsList();
+  if(page==='dash') renderDash();
+  if(page==='quick') populateTripSel();
+}
+
+function showNotif(msg){
+  const n=document.getElementById('notif');
+  n.textContent=msg;n.classList.add('show');
+  setTimeout(()=>n.classList.remove('show'),2000);
+}
+
+populateTripSel();
+renderDash();
+</script>
+<!-- EDIT TRIP MODAL -->
+<div id="editModal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.85);overflow-y:auto;padding:20px 14px">
+  <div style="background:#110016;border:1px solid rgba(192,0,26,0.4);border-radius:12px;padding:16px;max-width:480px;margin:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <div style="font-size:15px;font-weight:600;letter-spacing:2px;color:#fff">EDIT TRIP</div>
+      <button class="btn-sm" onclick="closeEditModal()">✕</button>
+    </div>
+    <div class="fl">
+      <div class="fg"><div class="flbl">Trip Code</div><input type="text" id="eCode" maxlength="8"></div>
+      <div class="fg"><div class="flbl">Destination</div><input type="text" id="eDest"></div>
+    </div>
+    <div class="fl">
+      <div class="fg"><div class="flbl">Start Date</div><input type="date" id="eStart"></div>
+      <div class="fg"><div class="flbl">End Date</div><input type="date" id="eEnd"></div>
+    </div>
+    <div class="fl">
+      <div class="fg"><div class="flbl">Jam Departure</div><input type="time" id="eDep"></div>
+      <div class="fg"><div class="flbl">Jam Tiba Kendari</div><input type="time" id="eArr"></div>
+    </div>
+    <div class="trow" style="padding:4px 0 12px">
+      <span class="tlbl" style="font-size:13px">Hotel breakfast included</span>
+      <button class="tgl" id="eBfast" onclick="this.classList.toggle('on')" aria-label="Breakfast"></button>
+    </div>
+    <button class="btn-p" onclick="saveEditTrip()">💾 Save Changes</button>
+  </div>
+</div>
+
+<script>
+let editingTripIdx = -1;
+
+function openEditModal(i){
+  const trips=db();
+  const t=trips[i];
+  if(!t) return;
+  editingTripIdx=i;
+  document.getElementById('eCode').value=t.code||'';
+  document.getElementById('eDest').value=t.destination||'';
+  document.getElementById('eStart').value=t.dateStart||'';
+  document.getElementById('eEnd').value=t.dateEnd||'';
+  document.getElementById('eDep').value=t.departure||'';
+  document.getElementById('eArr').value=t.arrival||'';
+  const bf=document.getElementById('eBfast');
+  t.breakfast?bf.classList.add('on'):bf.classList.remove('on');
+  document.getElementById('editModal').style.display='block';
+}
+
+function closeEditModal(){
+  document.getElementById('editModal').style.display='none';
+  editingTripIdx=-1;
+}
+
+function saveEditTrip(){
+  if(editingTripIdx<0) return;
+  const trips=db();
+  const t=trips[editingTripIdx];
+  t.code=document.getElementById('eCode').value.trim()||t.code;
+  t.destination=document.getElementById('eDest').value.trim();
+  t.dateStart=document.getElementById('eStart').value;
+  t.dateEnd=document.getElementById('eEnd').value;
+  t.departure=document.getElementById('eDep').value;
+  t.arrival=document.getElementById('eArr').value;
+  t.breakfast=document.getElementById('eBfast').classList.contains('on');
+  save(trips);
+  closeEditModal();
+  renderTripsList();
+  populateTripSel();
+  renderActiveTripCard();
+  showNotif('Trip updated!');
+}
+</script>
+
+</html>
