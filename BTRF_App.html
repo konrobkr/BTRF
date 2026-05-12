@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="id">
 <head>
 <meta charset="UTF-8">
@@ -28,149 +29,150 @@
   html,body{height:100%;overflow:hidden;background:#0a0a0f}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#e8e8f0}
 
-  #app{display:flex;flex-direction:column;height:100vh;height:100dvh;background:#0a0a0f;position:relative;overflow:hidden}
-  #app::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(180,0,20,0.04) 39px,rgba(180,0,20,0.04) 40px),repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(180,0,20,0.04) 39px,rgba(180,0,20,0.04) 40px);pointer-events:none;z-index:0}
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh;background:#0a0a0f;position:relative;overflow:hidden}
+#app::before{content:’’;position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(180,0,20,0.04) 39px,rgba(180,0,20,0.04) 40px),repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(180,0,20,0.04) 39px,rgba(180,0,20,0.04) 40px);pointer-events:none;z-index:0}
 
-  .mirror{position:absolute;top:0;right:-80px;width:100px;height:100%;background:linear-gradient(90deg,transparent,rgba(192,0,26,0.05),transparent);pointer-events:none;animation:ms 5s ease-in-out infinite;z-index:0}
-  @keyframes ms{0%,100%{opacity:0;transform:translateX(0)}50%{opacity:1;transform:translateX(-420px)}}
+.mirror{position:absolute;top:0;right:-80px;width:100px;height:100%;background:linear-gradient(90deg,transparent,rgba(192,0,26,0.05),transparent);pointer-events:none;animation:ms 5s ease-in-out infinite;z-index:0}
+@keyframes ms{0%,100%{opacity:0;transform:translateX(0)}50%{opacity:1;transform:translateX(-420px)}}
 
-  /* HEADER */
-  .hdr{background:#0d0010;border-bottom:2px solid #c0001a;padding:env(safe-area-inset-top,12px) 16px 10px;padding-top:calc(env(safe-area-inset-top,0px) + 12px);position:relative;z-index:10;flex-shrink:0}
-  .hdr-row{display:flex;align-items:center;gap:10px}
-  .visor{width:38px;height:22px;background:linear-gradient(135deg,#c0001a,#7a0010);clip-path:polygon(12% 0%,88% 0%,100% 50%,88% 100%,12% 100%,0% 50%);flex-shrink:0;position:relative}
-  .visor::after{content:'';position:absolute;inset:3px 5px;background:linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,80,80,0.08));clip-path:polygon(12% 0%,88% 0%,100% 50%,88% 100%,12% 100%,0% 50%)}
-  .hdr-title{font-size:17px;font-weight:600;letter-spacing:3px;color:#fff;text-transform:uppercase}
-  .hdr-sub{font-size:10px;color:#c0001a;letter-spacing:2px;text-transform:uppercase;margin-top:1px}
+/* HEADER */
+.hdr{background:#0d0010;border-bottom:2px solid #c0001a;padding:env(safe-area-inset-top,12px) 16px 10px;padding-top:calc(env(safe-area-inset-top,0px) + 12px);position:relative;z-index:10;flex-shrink:0}
+.hdr-row{display:flex;align-items:center;gap:10px}
+.visor{width:38px;height:22px;background:linear-gradient(135deg,#c0001a,#7a0010);clip-path:polygon(12% 0%,88% 0%,100% 50%,88% 100%,12% 100%,0% 50%);flex-shrink:0;position:relative}
+.visor::after{content:’’;position:absolute;inset:3px 5px;background:linear-gradient(135deg,rgba(255,255,255,0.12),rgba(255,80,80,0.08));clip-path:polygon(12% 0%,88% 0%,100% 50%,88% 100%,12% 100%,0% 50%)}
+.hdr-title{font-size:17px;font-weight:600;letter-spacing:3px;color:#fff;text-transform:uppercase}
+.hdr-sub{font-size:10px;color:#c0001a;letter-spacing:2px;text-transform:uppercase;margin-top:1px}
 
-  /* NAV */
-  .nav{display:flex;background:#110016;border-bottom:1px solid rgba(192,0,26,0.4);position:relative;z-index:10;flex-shrink:0}
-  .nt{flex:1;padding:9px 4px 7px;text-align:center;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#a08090;cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;transition:all 0.2s}
-  .nt i{display:block;font-size:18px;margin-bottom:2px}
-  .nt.on{color:#ff3355;border-bottom-color:#c0001a;background:rgba(192,0,26,0.14)}
+/* NAV */
+.nav{display:flex;background:#110016;border-bottom:1px solid rgba(192,0,26,0.4);position:relative;z-index:10;flex-shrink:0}
+.nt{flex:1;padding:9px 4px 7px;text-align:center;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#a08090;cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;transition:all 0.2s}
+.nt i{display:block;font-size:18px;margin-bottom:2px}
+.nt.on{color:#ff3355;border-bottom-color:#c0001a;background:rgba(192,0,26,0.14)}
 
-  /* SCROLL AREA */
-  .pages{flex:1;overflow:hidden;position:relative;z-index:1}
-  .pg{display:none;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(env(safe-area-inset-bottom,20px) + 20px)}
-  .pg.on{display:block}
+/* SCROLL AREA */
+.pages{flex:1;overflow:hidden;position:relative;z-index:1}
+.pg{display:none;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 14px calc(env(safe-area-inset-bottom,20px) + 20px)}
+.pg.on{display:block}
 
-  /* COMPONENTS */
-  .slbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#c0001a;margin:14px 0 7px;display:flex;align-items:center;gap:8px}
-  .slbl::after{content:'';flex:1;height:1px;background:rgba(192,0,26,0.25)}
-  .slbl:first-child{margin-top:2px}
+/* COMPONENTS */
+.slbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#c0001a;margin:14px 0 7px;display:flex;align-items:center;gap:8px}
+.slbl::after{content:’’;flex:1;height:1px;background:rgba(192,0,26,0.25)}
+.slbl:first-child{margin-top:2px}
 
-  .card{background:rgba(18,5,18,0.95);border:1px solid rgba(192,0,26,0.22);border-radius:10px;padding:13px;margin-bottom:10px;position:relative}
-  .card::before{content:'';position:absolute;top:0;left:16px;right:16px;height:1px;background:linear-gradient(90deg,transparent,rgba(232,0,29,0.4),transparent)}
+.card{background:rgba(18,5,18,0.95);border:1px solid rgba(192,0,26,0.22);border-radius:10px;padding:13px;margin-bottom:10px;position:relative}
+.card::before{content:’’;position:absolute;top:0;left:16px;right:16px;height:1px;background:linear-gradient(90deg,transparent,rgba(232,0,29,0.4),transparent)}
 
-  .fl{display:flex;gap:8px}
-  .fl .fg{flex:1;min-width:0}
-  .fg{margin-bottom:10px}
-  .flbl{font-size:10px;color:#a08090;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.fl{display:flex;gap:8px}
+.fl .fg{flex:1;min-width:0}
+.fg{margin-bottom:10px}
+.flbl{font-size:10px;color:#a08090;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
 
-  input,select,textarea{width:100%;background:#08000e;border:1px solid rgba(192,0,26,0.3);border-radius:8px;color:#e8e8f0;font-size:16px;padding:10px 12px;outline:none;font-family:inherit;-webkit-appearance:none;appearance:none}
-  input:focus,select:focus,textarea:focus{border-color:#c0001a;box-shadow:0 0 0 2px rgba(192,0,26,0.15)}
-  select option{background:#1a0010}
-  input[type=number]{-moz-appearance:textfield}
-  input[type=number]::-webkit-inner-spin-button,
-  input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input,select,textarea{width:100%;background:#08000e;border:1px solid rgba(192,0,26,0.3);border-radius:8px;color:#e8e8f0;font-size:16px;padding:10px 12px;outline:none;font-family:inherit;-webkit-appearance:none;appearance:none}
+input:focus,select:focus,textarea:focus{border-color:#c0001a;box-shadow:0 0 0 2px rgba(192,0,26,0.15)}
+select option{background:#1a0010}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 
-  .cat-pills{display:flex;gap:6px;flex-wrap:wrap}
-  .cat-pill{padding:8px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(192,0,26,0.25);background:transparent;color:#a08090;cursor:pointer;letter-spacing:0.3px;transition:all 0.15s;-webkit-appearance:none}
-  .cat-pill.sel{background:rgba(192,0,26,0.18);border-color:#c0001a;color:#ff4466}
+.cat-pills{display:flex;gap:6px;flex-wrap:wrap}
+.cat-pill{padding:8px 14px;border-radius:20px;font-size:13px;border:1px solid rgba(192,0,26,0.25);background:transparent;color:#a08090;cursor:pointer;letter-spacing:0.3px;transition:all 0.15s;-webkit-appearance:none}
+.cat-pill.sel{background:rgba(192,0,26,0.18);border-color:#c0001a;color:#ff4466}
 
-  .btn-p{width:100%;padding:14px;background:linear-gradient(135deg,#c0001a,#8a0010);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;position:relative;overflow:hidden;-webkit-appearance:none}
-  .btn-p::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);animation:sh 2.5s infinite}
-  @keyframes sh{to{left:160%}}
-  .btn-s{padding:9px 14px;background:transparent;border:1px solid rgba(192,0,26,0.35);border-radius:8px;color:#e8001d;font-size:12px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;-webkit-appearance:none}
-  .btn-sm{padding:7px 11px;background:transparent;border:1px solid rgba(192,0,26,0.25);border-radius:8px;color:#e8001d;font-size:12px;cursor:pointer;-webkit-appearance:none}
+.btn-p{width:100%;padding:14px;background:linear-gradient(135deg,#c0001a,#8a0010);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;position:relative;overflow:hidden;-webkit-appearance:none}
+.btn-p::after{content:’’;position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);animation:sh 2.5s infinite}
+@keyframes sh{to{left:160%}}
+.btn-s{padding:9px 14px;background:transparent;border:1px solid rgba(192,0,26,0.35);border-radius:8px;color:#e8001d;font-size:12px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;-webkit-appearance:none}
+.btn-sm{padding:7px 11px;background:transparent;border:1px solid rgba(192,0,26,0.25);border-radius:8px;color:#e8001d;font-size:12px;cursor:pointer;-webkit-appearance:none}
 
-  .trip-sel{background:#08000e;border:2px solid rgba(192,0,26,0.5);border-radius:10px;color:#fff;font-size:15px;padding:12px 14px;letter-spacing:1px;margin-bottom:14px;width:100%}
-  .trip-sel:focus{border-color:#c0001a}
+.trip-sel{background:#08000e;border:2px solid rgba(192,0,26,0.5);border-radius:10px;color:#fff;font-size:15px;padding:12px 14px;letter-spacing:1px;margin-bottom:14px;width:100%}
+.trip-sel:focus{border-color:#c0001a}
 
-  .qcard{background:linear-gradient(135deg,rgba(192,0,26,0.1),rgba(40,0,20,0.85));border:1px solid rgba(192,0,26,0.35);border-radius:12px;padding:14px;margin-bottom:14px}
-  .qhero{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-  .qtitle{font-size:15px;font-weight:600;letter-spacing:2px;color:#fff}
-  .qdays{font-size:11px;color:#888;margin-top:2px}
-  .qstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
-  .qs{background:rgba(0,0,0,0.3);border-radius:8px;padding:8px;text-align:center}
-  .qs .ql{font-size:9px;color:#888;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px}
-  .qs .qv{font-size:13px;font-weight:600;color:#e8e8f0}
-  .qs .qv.g{color:#4cde82}
-  .qs .qv.r{color:#e8001d}
-  .qs .qv.y{color:#d4a017}
+.qcard{background:linear-gradient(135deg,rgba(192,0,26,0.1),rgba(40,0,20,0.85));border:1px solid rgba(192,0,26,0.35);border-radius:12px;padding:14px;margin-bottom:14px}
+.qhero{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.qtitle{font-size:15px;font-weight:600;letter-spacing:2px;color:#fff}
+.qdays{font-size:11px;color:#888;margin-top:2px}
+.qstats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.qs{background:rgba(0,0,0,0.3);border-radius:8px;padding:8px;text-align:center}
+.qs .ql{font-size:9px;color:#888;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px}
+.qs .qv{font-size:13px;font-weight:600;color:#e8e8f0}
+.qs .qv.g{color:#4cde82}
+.qs .qv.r{color:#e8001d}
+.qs .qv.y{color:#d4a017}
 
-  .elist .ei{display:flex;align-items:flex-start;gap:8px;padding:10px 0;border-bottom:1px solid rgba(192,0,26,0.08)}
-  .elist .ei:last-child{border:none}
-  .edot{width:7px;height:7px;border-radius:50%;background:#c0001a;flex-shrink:0;margin-top:4px}
-  .edesc{flex:1;color:#ddd;font-size:13px;line-height:1.4}
-  .ecat{font-size:10px;color:#888;margin-top:2px}
-  .eamt{font-size:13px;font-weight:600;white-space:nowrap;text-align:right}
-  .eclaim{font-size:10px;color:#4cde82;text-align:right}
+.elist .ei{display:flex;align-items:flex-start;gap:8px;padding:10px 0;border-bottom:1px solid rgba(192,0,26,0.08)}
+.elist .ei:last-child{border:none}
+.edot{width:7px;height:7px;border-radius:50%;background:#c0001a;flex-shrink:0;margin-top:4px}
+.edesc{flex:1;color:#ddd;font-size:13px;line-height:1.4}
+.ecat{font-size:10px;color:#888;margin-top:2px}
+.eamt{font-size:13px;font-weight:600;white-space:nowrap;text-align:right}
+.eclaim{font-size:10px;color:#4cde82;text-align:right}
 
-  .tcard{background:rgba(15,3,15,0.95);border:1px solid rgba(192,0,26,0.22);border-radius:10px;padding:13px;margin-bottom:10px}
-  .tcard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
-  .tcode{font-size:15px;font-weight:600;letter-spacing:2px;color:#fff}
-  .tinfo{font-size:10px;color:#888;margin-top:2px;line-height:1.5}
-  .tstatus{padding:4px 10px;border-radius:10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;flex-shrink:0}
-  .tstatus.open{background:rgba(76,222,130,0.12);color:#4cde82;border:1px solid rgba(76,222,130,0.2)}
-  .tstatus.closed{background:rgba(192,0,26,0.12);color:#c0001a;border:1px solid rgba(192,0,26,0.2)}
-  .tamts{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
-  .ta .tl{font-size:9px;color:#666;letter-spacing:1px;text-transform:uppercase}
-  .ta .tv{color:#e8e8f0;font-size:13px;font-weight:500}
-  .ta .tv.g{color:#4cde82}
-  .tbtns{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.tcard{background:rgba(15,3,15,0.95);border:1px solid rgba(192,0,26,0.22);border-radius:10px;padding:13px;margin-bottom:10px}
+.tcard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.tcode{font-size:15px;font-weight:600;letter-spacing:2px;color:#fff}
+.tinfo{font-size:10px;color:#888;margin-top:2px;line-height:1.5}
+.tstatus{padding:4px 10px;border-radius:10px;font-size:10px;letter-spacing:1px;text-transform:uppercase;flex-shrink:0}
+.tstatus.open{background:rgba(76,222,130,0.12);color:#4cde82;border:1px solid rgba(76,222,130,0.2)}
+.tstatus.closed{background:rgba(192,0,26,0.12);color:#c0001a;border:1px solid rgba(192,0,26,0.2)}
+.tamts{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+.ta .tl{font-size:9px;color:#666;letter-spacing:1px;text-transform:uppercase}
+.ta .tv{color:#e8e8f0;font-size:13px;font-weight:500}
+.ta .tv.g{color:#4cde82}
+.tbtns{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
 
-  .shero{background:linear-gradient(135deg,rgba(192,0,26,0.12),rgba(40,0,20,0.9));border:1px solid rgba(192,0,26,0.3);border-radius:12px;padding:18px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden}
-  .shero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(192,0,26,0.03) 10px,rgba(192,0,26,0.03) 11px)}
-  .shl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:4px;position:relative}
-  .sha{font-size:30px;font-weight:600;color:#fff;position:relative}
-  .shs{font-size:12px;color:#c0001a;margin-top:4px;position:relative}
+.shero{background:linear-gradient(135deg,rgba(192,0,26,0.12),rgba(40,0,20,0.9));border:1px solid rgba(192,0,26,0.3);border-radius:12px;padding:18px;text-align:center;margin-bottom:14px;position:relative;overflow:hidden}
+.shero::before{content:’’;position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 10px,rgba(192,0,26,0.03) 10px,rgba(192,0,26,0.03) 11px)}
+.shl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:4px;position:relative}
+.sha{font-size:30px;font-weight:600;color:#fff;position:relative}
+.shs{font-size:12px;color:#c0001a;margin-top:4px;position:relative}
 
-  .sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-  .sc{background:rgba(12,3,12,0.9);border:1px solid rgba(192,0,26,0.15);border-radius:8px;padding:11px;text-align:center}
-  .sc .sl{font-size:9px;color:#666;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
-  .sc .sv{font-size:17px;font-weight:600;color:#e8e8f0}
-  .sc.g .sv{color:#4cde82}
-  .sc.y .sv{color:#d4a017}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.sc{background:rgba(12,3,12,0.9);border:1px solid rgba(192,0,26,0.15);border-radius:8px;padding:11px;text-align:center}
+.sc .sl{font-size:9px;color:#666;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px}
+.sc .sv{font-size:17px;font-weight:600;color:#e8e8f0}
+.sc.g .sv{color:#4cde82}
+.sc.y .sv{color:#d4a017}
 
-  .brow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(192,0,26,0.09)}
-  .brow:last-child{border:none}
-  .bcat{display:flex;align-items:center;gap:7px;color:#ccc;font-size:13px}
-  .bcat i{color:#c0001a;font-size:15px}
-  .bvals{text-align:right}
-  .bact{font-size:12px;color:#e8e8f0}
-  .bclm{font-size:10px;color:#4cde82}
+.brow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(192,0,26,0.09)}
+.brow:last-child{border:none}
+.bcat{display:flex;align-items:center;gap:7px;color:#ccc;font-size:13px}
+.bcat i{color:#c0001a;font-size:15px}
+.bvals{text-align:right}
+.bact{font-size:12px;color:#e8e8f0}
+.bclm{font-size:10px;color:#4cde82}
 
-  .tgl{width:44px;height:26px;background:#2a1a2a;border-radius:13px;position:relative;cursor:pointer;border:none;transition:background 0.2s;flex-shrink:0;-webkit-appearance:none}
-  .tgl.on{background:#c0001a}
-  .tgl::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left 0.2s}
-  .tgl.on::after{left:21px}
-  .trow{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
-  .tlbl{font-size:13px;color:#ccc}
+.tgl{width:44px;height:26px;background:#2a1a2a;border-radius:13px;position:relative;cursor:pointer;border:none;transition:background 0.2s;flex-shrink:0;-webkit-appearance:none}
+.tgl.on{background:#c0001a}
+.tgl::after{content:’’;position:absolute;top:3px;left:3px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left 0.2s}
+.tgl.on::after{left:21px}
+.trow{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+.tlbl{font-size:13px;color:#ccc}
 
-  .bar-chart{display:flex;align-items:flex-end;gap:6px;height:80px;margin-top:8px}
-  .bc-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
-  .bc-bar{width:100%;border-radius:4px 4px 0 0;min-height:2px;transition:height 0.6s}
-  .bc-lbl{font-size:9px;color:#666;text-align:center}
-  .bc-amt{font-size:9px;color:#aaa;text-align:center}
+.bar-chart{display:flex;align-items:flex-end;gap:6px;height:80px;margin-top:8px}
+.bc-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.bc-bar{width:100%;border-radius:4px 4px 0 0;min-height:2px;transition:height 0.6s}
+.bc-lbl{font-size:9px;color:#666;text-align:center}
+.bc-amt{font-size:9px;color:#aaa;text-align:center}
 
-  .notif{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#c0001a;color:#fff;padding:10px 22px;border-radius:20px;font-size:13px;letter-spacing:1px;z-index:999;opacity:0;transition:opacity 0.3s;white-space:nowrap;pointer-events:none}
-  .notif.show{opacity:1}
+.notif{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:#c0001a;color:#fff;padding:10px 22px;border-radius:20px;font-size:13px;letter-spacing:1px;z-index:999;opacity:0;transition:opacity 0.3s;white-space:nowrap;pointer-events:none}
+.notif.show{opacity:1}
 
-  .empty{text-align:center;padding:40px 16px;color:#555}
-  .empty i{font-size:40px;margin-bottom:12px;display:block}
-  .empty p{font-size:13px;line-height:1.7}
+.empty{text-align:center;padding:40px 16px;color:#555}
+.empty i{font-size:40px;margin-bottom:12px;display:block}
+.empty p{font-size:13px;line-height:1.7}
 
-  .hint-box{background:rgba(212,160,23,0.08);border:1px solid rgba(212,160,23,0.2);border-radius:8px;padding:9px 12px;font-size:12px;color:#d4a017;margin-bottom:10px}
+.hint-box{background:rgba(212,160,23,0.08);border:1px solid rgba(212,160,23,0.2);border-radius:8px;padding:9px 12px;font-size:12px;color:#d4a017;margin-bottom:10px}
 
-  .chip{display:inline-flex;align-items:center;gap:6px;background:rgba(192,0,26,0.1);border:1px solid rgba(192,0,26,0.3);border-radius:20px;padding:5px 12px;font-size:12px;color:#e8001d;letter-spacing:1px;margin-bottom:12px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:rgba(192,0,26,0.1);border:1px solid rgba(192,0,26,0.3);border-radius:20px;padding:5px 12px;font-size:12px;color:#e8001d;letter-spacing:1px;margin-bottom:12px}
 
-  .entry-del{padding:6px 8px;background:transparent;border:1px solid rgba(192,0,26,0.2);border-radius:6px;color:#c0001a;font-size:12px;cursor:pointer;margin-left:4px;flex-shrink:0}
+.entry-del{padding:6px 8px;background:transparent;border:1px solid rgba(192,0,26,0.2);border-radius:6px;color:#c0001a;font-size:12px;cursor:pointer;margin-left:4px;flex-shrink:0}
 
-  /* scrollbar */
-  .pg::-webkit-scrollbar{width:3px}
-  .pg::-webkit-scrollbar-track{background:transparent}
-  .pg::-webkit-scrollbar-thumb{background:rgba(192,0,26,0.3);border-radius:2px}
+/* scrollbar */
+.pg::-webkit-scrollbar{width:3px}
+.pg::-webkit-scrollbar-track{background:transparent}
+.pg::-webkit-scrollbar-thumb{background:rgba(192,0,26,0.3);border-radius:2px}
 </style>
+
 </head>
 <body>
 <div id="app">
@@ -194,106 +196,109 @@
 
   <div class="pages">
 
-    <!-- QUICK ADD -->
-    <div id="pg-quick" class="pg on">
-      <div class="slbl">Active Trip</div>
-      <select class="trip-sel" id="tripSel" onchange="onTripSel()">
-        <option value="">— Pilih trip —</option>
-      </select>
-      <div id="activeTripCard"></div>
+```
+<!-- QUICK ADD -->
+<div id="pg-quick" class="pg on">
+  <div class="slbl">Active Trip</div>
+  <select class="trip-sel" id="tripSel" onchange="onTripSel()">
+    <option value="">— Pilih trip —</option>
+  </select>
+  <div id="activeTripCard"></div>
 
-      <div id="quickForm" style="display:none">
-        <div class="slbl">Add Entry</div>
-        <div class="card">
-          <div class="fg" style="margin-bottom:10px">
-            <div class="flbl">Category</div>
-            <div class="cat-pills">
-              <button class="cat-pill sel" onclick="selCat(this,'Meals')">🍽 Meals</button>
-              <button class="cat-pill" onclick="selCat(this,'Transport')">🚗 Transport</button>
-              <button class="cat-pill" onclick="selCat(this,'Addons')">🛍 Addons</button>
-            </div>
-          </div>
-          <div id="mealHint" class="hint-box" style="display:none"></div>
-          <div class="fl">
-            <div class="fg" style="flex:2">
-              <div class="flbl">Description</div>
-              <input type="text" id="eDesc" placeholder="e.g. Grab to airport" autocomplete="off">
-            </div>
-            <div class="fg" style="flex:1">
-              <div class="flbl">Amount (Rp)</div>
-              <input type="number" id="eAmt" placeholder="0" inputmode="numeric">
-            </div>
-          </div>
-          <button class="btn-p" onclick="addEntry()">⚔ Add Entry</button>
-        </div>
-
-        <div class="slbl">Entries Hari Ini</div>
-        <div class="card">
-          <div id="todayEntries" class="elist"></div>
-        </div>
-
-        <div class="slbl">Semua Entries Trip Ini</div>
-        <div class="card">
-          <div id="allEntries" class="elist"></div>
+  <div id="quickForm" style="display:none">
+    <div class="slbl">Add Entry</div>
+    <div class="card">
+      <div class="fg" style="margin-bottom:10px">
+        <div class="flbl">Category</div>
+        <div class="cat-pills">
+          <button class="cat-pill sel" onclick="selCat(this,'Meals')">🍽 Meals</button>
+          <button class="cat-pill" onclick="selCat(this,'Transport')">🚗 Transport</button>
+          <button class="cat-pill" onclick="selCat(this,'Addons')">🛍 Addons</button>
         </div>
       </div>
-    </div>
-
-    <!-- TRIPS -->
-    <div id="pg-trips" class="pg">
-      <button class="btn-p" onclick="showNewTrip()" style="margin-bottom:14px">+ New Trip</button>
-      <div id="newTripForm" style="display:none">
-        <div class="slbl">New Trip</div>
-        <div class="card">
-          <div class="fl">
-            <div class="fg">
-              <div class="flbl">Trip Code</div>
-              <input type="text" id="nCode" placeholder="BDG2" maxlength="8" autocomplete="off">
-            </div>
-            <div class="fg">
-              <div class="flbl">Destination</div>
-              <input type="text" id="nDest" placeholder="Bandung" autocomplete="off">
-            </div>
-          </div>
-          <div class="fl">
-            <div class="fg">
-              <div class="flbl">Start Date</div>
-              <input type="date" id="nStart">
-            </div>
-            <div class="fg">
-              <div class="flbl">End Date</div>
-              <input type="date" id="nEnd">
-            </div>
-          </div>
-          <div class="fl">
-            <div class="fg">
-              <div class="flbl">Jam Departure</div>
-              <input type="time" id="nDep">
-            </div>
-            <div class="fg">
-              <div class="flbl">Jam Tiba Kendari</div>
-              <input type="time" id="nArr">
-            </div>
-          </div>
-          <div class="trow" style="padding:4px 0 10px">
-            <span class="tlbl" style="font-size:13px">Hotel breakfast included</span>
-            <button class="tgl" id="nBfast" onclick="this.classList.toggle('on')" aria-label="Breakfast included"></button>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:4px">
-            <button class="btn-p" onclick="createTrip()" style="flex:2">⚔ Create Trip</button>
-            <button class="btn-s" onclick="hideNewTrip()">Cancel</button>
-          </div>
+      <div id="mealHint" class="hint-box" style="display:none"></div>
+      <div class="fg"><div class="flbl">Tanggal</div><input type="date" id="eDate"></div>
+      <div class="fl">
+        <div class="fg" style="flex:2">
+          <div class="flbl">Description</div>
+          <input type="text" id="eDesc" placeholder="e.g. Grab to airport" autocomplete="off">
+        </div>
+        <div class="fg" style="flex:1">
+          <div class="flbl">Amount (Rp)</div>
+          <input type="number" id="eAmt" placeholder="0" inputmode="numeric">
         </div>
       </div>
-
-      <div class="slbl">All Trips</div>
-      <div id="tripsList"></div>
+      <button class="btn-p" onclick="addEntry()">⚔ Add Entry</button>
     </div>
 
-    <!-- DASHBOARD -->
-    <div id="pg-dash" class="pg">
-      <div id="dashContent"></div>
+    <div class="slbl">Entries Hari Ini</div>
+    <div class="card">
+      <div id="todayEntries" class="elist"></div>
     </div>
+
+    <div class="slbl">Semua Entries Trip Ini</div>
+    <div class="card">
+      <div id="allEntries" class="elist"></div>
+    </div>
+  </div>
+</div>
+
+<!-- TRIPS -->
+<div id="pg-trips" class="pg">
+  <button class="btn-p" onclick="showNewTrip()" style="margin-bottom:14px">+ New Trip</button>
+  <div id="newTripForm" style="display:none">
+    <div class="slbl">New Trip</div>
+    <div class="card">
+      <div class="fl">
+        <div class="fg">
+          <div class="flbl">Trip Code</div>
+          <input type="text" id="nCode" placeholder="BDG2" maxlength="8" autocomplete="off">
+        </div>
+        <div class="fg">
+          <div class="flbl">Destination</div>
+          <input type="text" id="nDest" placeholder="Bandung" autocomplete="off">
+        </div>
+      </div>
+      <div class="fl">
+        <div class="fg">
+          <div class="flbl">Start Date</div>
+          <input type="date" id="nStart">
+        </div>
+        <div class="fg">
+          <div class="flbl">End Date</div>
+          <input type="date" id="nEnd">
+        </div>
+      </div>
+      <div class="fl">
+        <div class="fg">
+          <div class="flbl">Jam Departure</div>
+          <input type="time" id="nDep">
+        </div>
+        <div class="fg">
+          <div class="flbl">Jam Tiba Kendari</div>
+          <input type="time" id="nArr">
+        </div>
+      </div>
+      <div class="trow" style="padding:4px 0 10px">
+        <span class="tlbl" style="font-size:13px">Hotel breakfast included</span>
+        <button class="tgl" id="nBfast" onclick="this.classList.toggle('on')" aria-label="Breakfast included"></button>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="btn-p" onclick="createTrip()" style="flex:2">⚔ Create Trip</button>
+        <button class="btn-s" onclick="hideNewTrip()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="slbl">All Trips</div>
+  <div id="tripsList"></div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="pg-dash" class="pg">
+  <div id="dashContent"></div>
+</div>
+```
 
   </div><!-- /pages -->
 
@@ -369,6 +374,10 @@ function updateMealHint(){
 }
 
 function onTripSel(){
+  // set default date to today
+  const todayStr=new Date().toISOString().slice(0,10);
+  const eDateEl=document.getElementById('eDate');
+  if(eDateEl&&!eDateEl.value) eDateEl.value=todayStr;
   renderActiveTripCard();
   const val=document.getElementById('tripSel').value;
   document.getElementById('quickForm').style.display=val?'block':'none';
@@ -460,14 +469,16 @@ function addEntry(){
   const desc=document.getElementById('eDesc').value.trim();
   const amt=parseFloat(document.getElementById('eAmt').value)||0;
   if(!amt){showNotif('Masukkan amount!');return;}
+  const entryDate=document.getElementById('eDate').value||new Date().toISOString().slice(0,10);
   const trips=db();
   const ti=trips.findIndex(t=>t.id===parseInt(val));
   if(ti<0) return;
-  const today=new Date().toISOString().slice(0,10);
-  trips[ti].entries.push({id:Date.now(),cat:selCatVal,desc,amt,date:today});
+  trips[ti].entries.push({id:Date.now(),cat:selCatVal,desc,amt,date:entryDate});
   save(trips);
   document.getElementById('eDesc').value='';
   document.getElementById('eAmt').value='';
+  // reset date to today
+  document.getElementById('eDate').value=new Date().toISOString().slice(0,10);
   renderActiveTripCard();
   renderTodayEntries();
   renderAllEntries();
@@ -744,7 +755,9 @@ function showNotif(msg){
 populateTripSel();
 renderDash();
 </script>
+
 <!-- EDIT TRIP MODAL -->
+
 <div id="editModal" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.85);overflow-y:auto;padding:20px 14px">
   <div style="background:#110016;border:1px solid rgba(192,0,26,0.4);border-radius:12px;padding:16px;max-width:480px;margin:auto">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
